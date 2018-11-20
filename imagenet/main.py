@@ -45,6 +45,8 @@ parser.add_argument('-b', '--batch-size', default=256, type=int,
                     help='mini-batch size (default: 256), this is the total '
                          'batch size of all GPUs on the current node when '
                          'using Data Parallel or Distributed Data Parallel')
+parser.add_argument('--optim', default='SGD', type=str, metavar='OPTIM',
+                    help='choose optimizer')
 parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
                     metavar='LR', help='initial learning rate')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
@@ -86,7 +88,7 @@ def main():
 
     if not os.path.exists('log'):
         os.mkdir('log')
-    logging_name = 'log' + args.arch + args.kind + '.txt' 
+    logging_name = 'log' + args.arch + args.optim + args.kind + '.txt' 
     logging_path = os.path.join('log', logging_name) 
     
     logging.basicConfig(level=logging.DEBUG,
@@ -97,8 +99,9 @@ def main():
 
     logging.debug('this is a logging debug message')
     logging.info('Logging for {}'.format(args.arch))
-    logging.info('batch_size = {}, lr = {}, weight_decay= {}, momentum = {}'.format( \
-                   args.batch_size,  args.lr, args.weight_decay, args.momentum) )
+    logging.info('optim : [{}], batch_size = {}, lr = {}, weight_decay= {}, momentum = {}'.format( \
+                    args.optim, args.batch_size,
+                    args.lr, args.weight_decay, args.momentum) )
 
 
     if args.seed is not None:
@@ -183,11 +186,18 @@ def main_worker(gpu, ngpus_per_node, args):
     # define loss function (criterion) and optimizer
     criterion = nn.CrossEntropyLoss().cuda(args.gpu)
 
-    optimizer = torch.optim.SGD(model.parameters(), args.lr,
-                                momentum=args.momentum,
-                                weight_decay=args.weight_decay)
+
+    if args.optim == 'SGD':
+        optimizer = torch.optim.SGD(model.parameters(), args.lr,
+                                    momentum=args.momentum,
+                                    weight_decay=args.weight_decay)
+    elif args.optim == 'Adam':
+        optimizer = torch.optim.Adam(model.parameters(), 
+                                    lr=args.lr, betas=(0.9,0.999),
+                                    weight_decay=args.weight_decay)
 
     # optionally resume from a checkpoint
+
     if args.resume:
         if os.path.isfile(args.resume):
             print("=> loading checkpoint '{}'".format(args.resume))
@@ -269,7 +279,7 @@ def main_worker(gpu, ngpus_per_node, args):
             'best_acc1': best_acc1,
             'optimizer' : optimizer.state_dict(),
         }, is_best)
-    torch.save(model.state_dict(), args.arch + args.kind + 'params.pth')
+    torch.save(model.state_dict(), args.arch + args.optim + args.kind + 'params.pth')
     
 
 def train(train_loader, model, criterion, optimizer, epoch, args):
@@ -319,7 +329,8 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
                   'Acc@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
                    epoch, i, len(train_loader), batch_time=batch_time,
                    data_time=data_time, loss=losses, top1=top1, top5=top5))
-
+            logging.info(' train* ===Epoch: [{0}][{1}/{2}]\t Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f} Loss {loss.val:.4f}'
+              .format(epoch, i, len(train_loader), top1=top1, top5=top5, loss=losses))
 
 
 def validate(val_loader, model, criterion, args):
