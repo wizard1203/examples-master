@@ -220,6 +220,15 @@ def main_worker(gpu, ngpus_per_node, args):
                                      std=[0.229, 0.224, 0.225])
 
     #trainset = torchvision.datasets.ImageFolder(traindir, transforms.Compose([
+    # trainset = datasets.ImageFolder(
+    #     traindir,
+    #     transforms.Compose([
+    #         transforms.RandomResizedCrop(224),
+    #         transforms.RandomHorizontalFlip(),
+    #         transforms.ToTensor(),
+    #         normalize,
+    #     ]))
+
     hdf5fn = os.path.join(args.data, 'imagenet-shuffled.hdf5')
     trainset = DatasetHDF5(hdf5fn, 'train', transforms.Compose([
         transforms.ToPILImage(),
@@ -228,7 +237,7 @@ def main_worker(gpu, ngpus_per_node, args):
         transforms.ToTensor(),
         normalize,
         ]))
-    #self.trainset = trainset
+
 
 
     if args.distributed:
@@ -240,7 +249,6 @@ def main_worker(gpu, ngpus_per_node, args):
         trainset, batch_size=args.batch_size, shuffle=False,
         num_workers=args.workers, pin_memory=True, sampler=train_sampler)
 
-    #testset = torchvision.datasets.ImageFolder(testdir, transforms.Compose([
     testset = DatasetHDF5(hdf5fn, 'val', transforms.Compose([
             transforms.ToPILImage(),
     #        transforms.Scale(256),
@@ -248,11 +256,22 @@ def main_worker(gpu, ngpus_per_node, args):
             transforms.ToTensor(),
             normalize,
         ]))
-
     val_loader = torch.utils.data.DataLoader(
         testset,
         batch_size=args.batch_size, shuffle=False,
         num_workers=args.workers, pin_memory=True)
+
+    # val_loader = torch.utils.data.DataLoader(
+    #     datasets.ImageFolder(valdir, transforms.Compose([
+    #         transforms.Resize(256),
+    #         transforms.CenterCrop(224),
+    #         transforms.ToTensor(),
+    #         normalize,
+    #     ])),
+    #     batch_size=args.batch_size, shuffle=False,
+    #     num_workers=args.workers, pin_memory=True)
+
+
 
     if args.evaluate:
         validate(val_loader, model, criterion)
