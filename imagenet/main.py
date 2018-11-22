@@ -21,7 +21,7 @@ import torchvision.datasets as datasets
 import torchvision.models as models
 
 from datasets import DatasetHDF5  
-from alexnet import AlexNet
+from networks.alexnet import AlexNet
 
 
 model_names = sorted(name for name in models.__dict__
