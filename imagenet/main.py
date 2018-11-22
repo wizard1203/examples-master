@@ -163,6 +163,7 @@ def main_worker(gpu, ngpus_per_node, args):
     else:
         print("=> creating model '{}'".format(args.arch))
         if args.customize:
+            print("=> self-defined model '{}'".format(args.arch))
             model = AlexNet()
         else:
             model = models.__dict__[args.arch]()
