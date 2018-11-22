@@ -92,7 +92,12 @@ def main():
 
     if not os.path.exists('log'):
         os.mkdir('log')
-    logging_name = 'log' + args.arch + args.optim + args.kind + '.txt' 
+    
+    if args.customize:
+        logging_name = 'log' + '_self_' + args.arch + '_'+ args.optim + args.kind + '.txt' 
+    else:
+        logging_name = 'log' + '_default_' + args.arch  + '_' + args.optim + args.kind + '.txt'
+
     logging_path = os.path.join('log', logging_name) 
     
     logging.basicConfig(level=logging.DEBUG,
