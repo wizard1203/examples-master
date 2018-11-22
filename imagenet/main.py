@@ -243,9 +243,15 @@ def main_worker(gpu, ngpus_per_node, args):
     #     ]))
 
     hdf5fn = os.path.join(args.data, 'imagenet-shuffled.hdf5')
+
+    if args.customize:
+        size_resize = 227
+    else:
+        size_resize = 224
+
     trainset = DatasetHDF5(hdf5fn, 'train', transforms.Compose([
         transforms.ToPILImage(),
-        transforms.RandomResizedCrop(224),
+        transforms.RandomResizedCrop(size_resize),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         normalize,
@@ -265,7 +271,7 @@ def main_worker(gpu, ngpus_per_node, args):
     testset = DatasetHDF5(hdf5fn, 'val', transforms.Compose([
             transforms.ToPILImage(),
     #        transforms.Scale(256),
-            transforms.CenterCrop(224),
+            transforms.CenterCrop(size_resize),
             transforms.ToTensor(),
             normalize,
         ]))
