@@ -84,6 +84,8 @@ parser.add_argument('--multiprocessing-distributed', action='store_true',default
                          'multi node data parallel training')
 parser.add_argument('--kind', default='0', type=str, metavar='N',
                     help='number of adjustment (default: 0)')
+parser.add_argument('--measure', dest='measure', action='store_true',
+                    help='use pre-trained model')
 
 best_acc1 = 0
 
@@ -143,6 +145,17 @@ def main():
 
 
 def main_worker(gpu, ngpus_per_node, args):
+    batch_time = AverageMeter()
+    data_time = AverageMeter()
+    losses = AverageMeter()
+    top1 = AverageMeter()
+    top5 = AverageMeter()
+
+    # switch to train mode
+    model.train()
+
+    end = time.time()
+
     global best_acc1
     args.gpu = gpu
 
@@ -326,13 +339,16 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
     losses = AverageMeter()
     top1 = AverageMeter()
     top5 = AverageMeter()
+    disk_time = AverageMeter()
+
 
     # switch to train mode
     model.train()
 
+
     end = time.time()
     for i, (input, target) in enumerate(train_loader):
-        # measure data loading time
+        # measure data loading times
         data_time.update(time.time() - end)
 
         if args.gpu is not None:
