@@ -157,7 +157,7 @@ def main_worker(gpu, ngpus_per_node, args):
     top5 = AverageMeter()
 
     # switch to train mode
-    model.train()
+
 
     end = time.time()
 
@@ -186,7 +186,7 @@ def main_worker(gpu, ngpus_per_node, args):
             model = AlexNet()
         else:
             model = models.__dict__[args.arch]()
-
+    model.train()
     if args.distributed:
         # For multiprocessing distributed, DistributedDataParallel constructor
         # should always set the single device scope, otherwise,
@@ -277,7 +277,7 @@ def main_worker(gpu, ngpus_per_node, args):
         ]))
 
     if args.distributed:
-        train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
+        train_sampler = torch.utils.data.distributed.DistributedSampler(trainset)
     else:
         train_sampler = None
 
@@ -317,7 +317,7 @@ def main_worker(gpu, ngpus_per_node, args):
         num_workers = [1,2,4,8,16,32,64]
         for batch_sizei in batch_sizes:
             for num_workeri in num_workers:
-                log_name = args.arch + meas1.GPUmonitor[0].name + 'b' + str(batch_sizei)
+                log_name = args.arch + meas1.GPUmonitor[0].name + 'b' + str(batch_sizei) \
                     + 'n' + str(num_workeri) + '.log'
                 log_file = os.path.join(log_path, log_name)
 
@@ -328,7 +328,7 @@ def main_worker(gpu, ngpus_per_node, args):
                 logger1.info('***batch_size: *[{}]*, num_workers: *[{}]*")'.
                             format(batch_sizei, num_workeri))
                 one_measure(args, meas1, logger1,
-                    batch_sizei, num_workeri, model, criterion, optimizer)
+                    batch_sizei, num_workeri, model, criterion, optimizer, size_resize)
                 meas1.reset()
                 meas1.gpu_load.reset()
                 meas1.gpu_speed.reset()
@@ -362,11 +362,13 @@ def main_worker(gpu, ngpus_per_node, args):
         }, is_best)
     torch.save(model.state_dict(), args.arch + args.optim + args.kind + 'params.pth')
 
-def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion, optimizer):
+def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion, optimizer, size_resize):
     """
         measure one set of args batch_siez and num_workers
     """
-
+    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                     std=[0.229, 0.224, 0.225])
+    hdf5fn = os.path.join(args.data, 'imagenet-shuffled.hdf5')
     trainset = DatasetHDF5(hdf5fn, 'train', transforms.Compose([
         transforms.ToPILImage(),
         transforms.RandomResizedCrop(size_resize),
@@ -377,7 +379,7 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
 
     train_loader = torch.utils.data.DataLoader(
         trainset, batch_size=batch_size, shuffle=False,
-        num_workers=num_workers, pin_memory=True, sampler=train_sampler)
+        num_workers=num_workers, pin_memory=True)
 
 
     for epoch in range(2):
@@ -392,7 +394,6 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
             gpu_load_records.append(meas1.gpu_load.val)
 
             # measure data loading times
-            data_time.update(time.time() - end)
             meas1.io_time.update_end(time.time())
 
             # watch gpu_load
@@ -432,15 +433,17 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
             meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
             gpu_load_records.append(meas1.gpu_load.val)      
 
-            print('Epoch: [{0}][{1}/{2}]\t'
-                  'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                  'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                  'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
-                   epoch, i, len(train_loader), batch_time=batch_time,
-                   data_time=data_time, loss=losses))
+            print('>>> *io_time : [{}] *h2d_time :[{}] gpu_time :[{}] '
+                         '  *batch_time :[{}] *gpu_speed :[{}] image/s'
+                         ' **gpu_load :[{},{},{},{},{}]'
+                        .pformat(meas1.io_time.gap, meas1.h2d_time.gap, meas1.gpu_time.gap,
+                        meas1.batch_time.gap, meas1.gpu_speed.val, gpu_load_records[0],
+                        gpu_load_records[1], gpu_load_records[2], gpu_load_records[3],
+                        gpu_load_records[4]
+                         ))
             logger1.info('>>> ===========********  measing batch ===========')
-            logger1.info(' train* ===Epoch: [{0}][{1}/{2}]\t  Loss {loss.val:.4f}'
-              .format(epoch, i, len(train_loader), loss=losses))
+            logger1.info(' train* ===Epoch: [{0}][{1}/{2}]\t }'
+              .format(epoch, i, len(train_loader)))
 
             meas1.io_time.update_start(time.time())    
             meas1.batch_time.update_end(time.time())

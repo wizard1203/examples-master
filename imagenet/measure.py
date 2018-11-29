@@ -42,7 +42,7 @@ class Measure:
         self.batch_time = GapMeter()
 
     def add_GPUmonitor(self, delay):
-        self.GPUmonitor = GPUmonitor(delay)
+        self.GPUmonitor = GPUMonitor(delay)
         # gpu_load
         self.gpu_load = AverageMeter()
         # gpu_load_record
@@ -115,11 +115,11 @@ class GPUMonitor(Thread):
         self.GPUs = GPUtil.getGPUs()
 
     def getInfo():
-        reture [(self.GPUs[i].load, self.GPUs[i].memoryUtil, self.GPUs[i].memoryUsed)
+        return [(self.GPUs[i].load, self.GPUs[i].memoryUtil, self.GPUs[i].memoryUsed)
             for i in range(len(GPUs))]
 
     def getLoad():
-        reture [self.GPUs[i].load for i in range(len(GPUs))]
+        return [self.GPUs[i].load for i in range(len(GPUs))]
 
     def run(self):
         while not self.stopped:
