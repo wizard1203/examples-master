@@ -6,6 +6,9 @@ import time
 import warnings
 import sys
 import logging
+import measure
+import getlogger
+
 
 import torch
 import torch.nn as nn
@@ -22,7 +25,7 @@ import torchvision.models as models
 
 from datasets import DatasetHDF5  
 from networks.alexnet import AlexNet
-
+from pprint import pformat
 
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
@@ -87,21 +90,23 @@ parser.add_argument('--kind', default='0', type=str, metavar='N',
 parser.add_argument('--measure', dest='measure', action='store_true',
                     help='use pre-trained model')
 
+
 best_acc1 = 0
+meas1 = measure.Measure()
 
 def main():
     args = parser.parse_args()
 
     if not os.path.exists('log'):
         os.mkdir('log')
-    
+
     if args.customize:
         logging_name = 'log' + '_self_' + args.arch + '_'+ args.optim + args.kind + '.txt' 
     else:
         logging_name = 'log' + '_default_' + args.arch  + '_' + args.optim + args.kind + '.txt'
 
     logging_path = os.path.join('log', logging_name) 
-    
+
     logging.basicConfig(level=logging.DEBUG,
                         filename=logging_path,
                         filemode='a',
@@ -156,6 +161,7 @@ def main_worker(gpu, ngpus_per_node, args):
 
     end = time.time()
 
+    global meas1
     global best_acc1
     args.gpu = gpu
 
@@ -270,8 +276,6 @@ def main_worker(gpu, ngpus_per_node, args):
         normalize,
         ]))
 
-
-
     if args.distributed:
         train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
     else:
@@ -303,7 +307,33 @@ def main_worker(gpu, ngpus_per_node, args):
     #     batch_size=args.batch_size, shuffle=False,
     #     num_workers=args.workers, pin_memory=True)
 
+    if args.measure:
+        meas1.add_GPUmonitor(0.05)
+        meas1.tomeasure()
 
+        log_path = '~/measurepipeline'
+
+        batch_sizes = [16,32,64,128,256]
+        num_workers = [1,2,4,8,16,32,64]
+        for batch_sizei in batch_sizes:
+            for num_workeri in num_workers:
+                log_name = args.arch + meas1.GPUmonitor[0].name + 'b' + str(batch_sizei)
+                    + 'n' + str(num_workeri) + '.log'
+                log_file = os.path.join(log_path, log_name)
+
+                logger1 = getlogger.get_logger('measure', log_file)
+
+                logger1.info('>>>==================')
+
+                logger1.info('***batch_size: *[{}]*, num_workers: *[{}]*")'.
+                            format(batch_sizei, num_workeri))
+                one_measure(args, meas1, logger1,
+                    batch_sizei, num_workeri, model, criterion, optimizer)
+                meas1.reset()
+                meas1.gpu_load.reset()
+                meas1.gpu_speed.reset()
+        meas1.GPUmonitor.stop()
+        return
 
     if args.evaluate:
         validate(val_loader, model, criterion)
@@ -331,7 +361,104 @@ def main_worker(gpu, ngpus_per_node, args):
             'optimizer' : optimizer.state_dict(),
         }, is_best)
     torch.save(model.state_dict(), args.arch + args.optim + args.kind + 'params.pth')
-    
+
+def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion, optimizer):
+    """
+        measure one set of args batch_siez and num_workers
+    """
+
+    trainset = DatasetHDF5(hdf5fn, 'train', transforms.Compose([
+        transforms.ToPILImage(),
+        transforms.RandomResizedCrop(size_resize),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        normalize,
+        ]))
+
+    train_loader = torch.utils.data.DataLoader(
+        trainset, batch_size=batch_size, shuffle=False,
+        num_workers=num_workers, pin_memory=True, sampler=train_sampler)
+
+
+    for epoch in range(2):
+        # train for measuring
+
+        meas1.io_time.update_start(time.time())
+        meas1.batch_time.update_start(time.time())
+        for i, (input, target) in enumerate(train_loader):
+            gpu_load_records = []
+            # watch gpu_load
+            meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
+            gpu_load_records.append(meas1.gpu_load.val)
+
+            # measure data loading times
+            data_time.update(time.time() - end)
+            meas1.io_time.update_end(time.time())
+
+            # watch gpu_load
+            meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
+            gpu_load_records.append(meas1.gpu_load.val)
+
+            # measure data loaded to GPU time
+            meas1.h2d_time.update_start(time.time())                
+            if args.gpu is not None:
+                input = input.cuda(args.gpu, non_blocking=True)
+            target = target.cuda(args.gpu, non_blocking=True)
+            meas1.h2d_time.update_end(time.time())
+
+            # watch gpu_load
+            meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
+            gpu_load_records.append(meas1.gpu_load.val)
+
+            # compute output
+            meas1.gpu_time.update_start(time.time())
+            output = model(input)
+            loss = criterion(output, target)
+
+            # watch gpu_load
+            meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
+            gpu_load_records.append(meas1.gpu_load.val)
+
+            # compute gradient and do SGD step
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            meas1.gpu_time.update_end(time.time())
+
+            # calculate gpu_speed
+            meas1.gpu_speed.update(meas1.gpu_time.gap / batch_size)
+
+            # watch gpu_load
+            meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
+            gpu_load_records.append(meas1.gpu_load.val)      
+
+            print('Epoch: [{0}][{1}/{2}]\t'
+                  'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+                  'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
+                  'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
+                   epoch, i, len(train_loader), batch_time=batch_time,
+                   data_time=data_time, loss=losses))
+            logger1.info('>>> ===========********  measing batch ===========')
+            logger1.info(' train* ===Epoch: [{0}][{1}/{2}]\t  Loss {loss.val:.4f}'
+              .format(epoch, i, len(train_loader), loss=losses))
+
+            meas1.io_time.update_start(time.time())    
+            meas1.batch_time.update_end(time.time())
+            logger1.info('>>> *io_time : [{}] *h2d_time :[{}] gpu_time :[{}] '
+                         '  *batch_time :[{}] *gpu_speed :[{}] image/s'
+                         ' **gpu_load :[{},{},{},{},{}]'
+                        .pformat(meas1.io_time.gap, meas1.h2d_time.gap, meas1.gpu_time.gap,
+                        meas1.batch_time.gap, meas1.gpu_speed.val, gpu_load_records[0],
+                        gpu_load_records[1], gpu_load_records[2], gpu_load_records[3],
+                        gpu_load_records[4]
+                         ))
+        logger1.info('>>>average time  ========= **io_time : [{}] **h2d_time :[{}] '
+             '**gpu_time :[{}] **batch_time :[{}] '
+             '**gpu_speed :[{} image/s] **gpu_load :[{}]'
+            .pformat(meas1.io_time.avemeter.avg, meas1.h2d_time.avemeter.avg, 
+                meas1.gpu_time.avemeter.avg, meas1.batch_time.avemeter.avg, 
+                meas1.gpu_speed.avg, meas1.gpu_load.avg
+             ))
 
 def train(train_loader, model, criterion, optimizer, epoch, args):
     batch_time = AverageMeter()

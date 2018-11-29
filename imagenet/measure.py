@@ -25,65 +25,40 @@ from datasets import DatasetHDF5
 from networks.alexnet import AlexNet
 from threading import Thread
 
-#TODO dataloader.batchsample.batchsize 改变即可。
 class Measure:
 
     def __init__(self):
-        # io time
+        self.reset()
+        self.ifmeasure = False
+
+    def reset(self):
+         # io time
         self.io_time = GapMeter()
-
-        #h2d_time 
+        # h2d_time 
         self.h2d_time = GapMeter()
-
         # gpu_time
         self.gpu_time = GapMeter()
-
-        self.ifmeasure = False
+        # batch_time
+        self.batch_time = GapMeter()
 
     def add_GPUmonitor(self, delay):
         self.GPUmonitor = GPUmonitor(delay)
+        # gpu_load
+        self.gpu_load = AverageMeter()
+        # gpu_load_record
+        # self.gpu_load_record = AverageMeter()
+        # gpu_speed
+        self.gpu_speed = AverageMeter()
 
     def tomeasure(self):
         self.ifmeasure = True
 
+    def __getattr__(self, attr, val):
+        if not self.ifmeasure:
+            raise ValueError('{} not measure mode ')
 
 
 
-    def _parse(self, kwargs):
-        state_dict = self._state_dict()
-        for k, v in kwargs.items():
-            if k not in state_dict:
-                raise ValueError('UnKnown Option: "--%s"' % k)
-            setattr(self, k, v)
-
-        print('======user config========')
-        pprint(self._state_dict())
-        print('==========end============')
-        if opt.customize:
-            logging_name = 'log' + '_self_' + opt.arch + '_'+ opt.optim + opt.kind + '.txt' 
-        else:
-            logging_name = 'log' + '_default_' + opt.arch  + '_' + opt.optim + opt.kind + '.txt'
-        if not os.path.exists('log'):
-            os.mkdir('log')
-
-        logging_path = os.path.join('log', logging_name) 
-    
-        logging.basicConfig(level=logging.DEBUG,
-                        filename=logging_path,
-                        filemode='a',
-                        format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s',
-                        datefmt='%H:%M:%S')
-        logging.info('Logging for {}'.format(opt.arch))
-        logging.info('======user config========')
-        logging.info(pformat(self._state_dict()))
-        logging.info('==========end============')
-        # logging.info('optim : [{}], batch_size = {}, lr = {}, weight_decay= {}, momentum = {}'.format( \
-        #                 args.optim, args.batch_size,
-        #                 args.lr, args.weight_decay, args.momentum) )
-
-    def _state_dict(self):
-        return {k: getattr(self, k) for k, _ in Config.__dict__.items() \
-                if not k.startswith('_')}
 
 class GapMeter(object):
     """Computes and stores the average and current value"""	
@@ -110,8 +85,8 @@ class GapMeter(object):
                 self.metering = False
             else:
                 raise RuntimeError('not metering')
-            except:
-                print('========please start to            meter before end it ==============')    		
+        except:
+            print('========please start to            meter before end it ==============')    		
 
 
 class AverageMeter(object):
