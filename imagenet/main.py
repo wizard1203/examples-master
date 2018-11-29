@@ -94,6 +94,7 @@ parser.add_argument('--measure', dest='measure', action='store_true',
 best_acc1 = 0
 meas1 = measure.Measure()
 
+
 def main():
     args = parser.parse_args()
 
@@ -613,7 +614,5 @@ def accuracy(output, target, topk=(1,)):
             correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
             res.append(correct_k.mul_(100.0 / batch_size))
         return res
-
-
-if __name__ == '__main__':
-    main()
+    
+main()
