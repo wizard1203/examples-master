@@ -318,7 +318,7 @@ def main_worker(gpu, ngpus_per_node, args):
         num_workers = [1,2,4,8,16,32,64]
         for batch_sizei in batch_sizes:
             for num_workeri in num_workers:
-                log_name = args.arch + meas1.GPUmonitor[0].name + 'b' + str(batch_sizei) \
+                log_name = args.arch + meas1.GPUmonitor.GPUs[0].name + 'b' + str(batch_sizei) \
                     + 'n' + str(num_workeri) + '.log'
                 log_file = os.path.join(log_path, log_name)
 
