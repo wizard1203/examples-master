@@ -6,8 +6,8 @@ import time
 import warnings
 import sys
 import logging
-import .measure
-import .getlogger
+import measure
+import getlogger
 
 
 import torch
