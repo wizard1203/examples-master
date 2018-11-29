@@ -8,21 +8,7 @@ import sys
 import logging
 import GPUtil
 
-import torch
-import torch.nn as nn
-import torch.nn.parallel
-import torch.backends.cudnn as cudnn
-import torch.distributed as dist
-import torch.optim
-import torch.multiprocessing as mp
-import torch.utils.data
-import torch.utils.data.distributed
-import torchvision.transforms as transforms
-import torchvision.datasets as datasets
-import torchvision.models as models
 
-from datasets import DatasetHDF5  
-from networks.alexnet import AlexNet
 from threading import Thread
 
 class Measure:
