@@ -312,7 +312,7 @@ def main_worker(gpu, ngpus_per_node, args):
         meas1.add_GPUmonitor(0.05)
         meas1.tomeasure()
 
-        log_path = '~/measurepipeline'
+        log_path = '/measurepipeline'
 
         batch_sizes = [16,32,64,128,256]
         num_workers = [1,2,4,8,16,32,64]
