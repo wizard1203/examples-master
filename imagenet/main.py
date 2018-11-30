@@ -438,7 +438,7 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
             print('>>> *io_time : [{}] *h2d_time :[{}] gpu_time :[{}] '
                          '  *batch_time :[{}] *gpu_speed :[{}] image/s'
                          ' **gpu_load :[{},{},{},{},{}]'
-                        .pformat(meas1.io_time.gap, meas1.h2d_time.gap, meas1.gpu_time.gap,
+                        .format(meas1.io_time.gap, meas1.h2d_time.gap, meas1.gpu_time.gap,
                         meas1.batch_time.gap, meas1.gpu_speed.val, gpu_load_records[0],
                         gpu_load_records[1], gpu_load_records[2], gpu_load_records[3],
                         gpu_load_records[4]
@@ -452,7 +452,7 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
             logger1.info('>>> *io_time : [{}] *h2d_time :[{}] gpu_time :[{}] '
                          '  *batch_time :[{}] *gpu_speed :[{}] image/s'
                          ' **gpu_load :[{},{},{},{},{}]'
-                        .pformat(meas1.io_time.gap, meas1.h2d_time.gap, meas1.gpu_time.gap,
+                        .format(meas1.io_time.gap, meas1.h2d_time.gap, meas1.gpu_time.gap,
                         meas1.batch_time.gap, meas1.gpu_speed.val, gpu_load_records[0],
                         gpu_load_records[1], gpu_load_records[2], gpu_load_records[3],
                         gpu_load_records[4]
@@ -460,7 +460,7 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
         logger1.info('>>>average time  ========= **io_time : [{}] **h2d_time :[{}] '
              '**gpu_time :[{}] **batch_time :[{}] '
              '**gpu_speed :[{} image/s] **gpu_load :[{}]'
-            .pformat(meas1.io_time.avemeter.avg, meas1.h2d_time.avemeter.avg, 
+            .format(meas1.io_time.avemeter.avg, meas1.h2d_time.avemeter.avg,
                 meas1.gpu_time.avemeter.avg, meas1.batch_time.avemeter.avg, 
                 meas1.gpu_speed.avg, meas1.gpu_load.avg
              ))
