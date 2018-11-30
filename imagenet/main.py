@@ -444,7 +444,7 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
                         gpu_load_records[4]
                          ))
             logger1.info('>>> ===========********  measing batch ===========')
-            logger1.info(' train* ===Epoch: [{0}][{1}/{2}]\t }'
+            logger1.info(' train* ===Epoch: [{0}][{1}/{2}]\t'
               .format(epoch, i, len(train_loader)))
 
             meas1.io_time.update_start(time.time())    
