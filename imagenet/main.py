@@ -433,8 +433,10 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
 
             # watch gpu_load
             meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
-            gpu_load_records.append(meas1.gpu_load.val)      
+            gpu_load_records.append(meas1.gpu_load.val)
 
+            print(' train* ===Epoch: [{0}][{1}/{2}]\t'
+              .format(epoch, i, len(train_loader)))
             print('>>> *io_time : [{}] *h2d_time :[{}] gpu_time :[{}] '
                          '  *batch_time :[{}] *gpu_speed :[{}] image/s'
                          ' **gpu_load :[{},{},{},{},{}]'
@@ -457,6 +459,8 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
                         gpu_load_records[1], gpu_load_records[2], gpu_load_records[3],
                         gpu_load_records[4]
                          ))
+            meas1.batch_time.update_start(time.time())
+            
         logger1.info('>>>average time  ========= **io_time : [{}] **h2d_time :[{}] '
              '**gpu_time :[{}] **batch_time :[{}] '
              '**gpu_speed :[{} image/s] **gpu_load :[{}]'
