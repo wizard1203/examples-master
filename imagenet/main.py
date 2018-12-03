@@ -383,91 +383,92 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
         trainset, batch_size=batch_size, shuffle=False,
         num_workers=num_workers, pin_memory=True)
 
-
-    for epoch in range(2):
+    epoch = 0
+    #for epoch in range(2):
         # train for measuring
 
+    meas1.io_time.update_start(time.time())
+    meas1.batch_time.update_start(time.time())
+    for i, (input, target) in enumerate(train_loader):
+        gpu_load_records = []
+        # watch gpu_load
+        meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
+        gpu_load_records.append(meas1.gpu_load.val)
+
+        # measure data loading times
+        meas1.io_time.update_end(time.time())
+
+        # watch gpu_load
+        meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
+        gpu_load_records.append(meas1.gpu_load.val)
+
+        # measure data loaded to GPU time
+        meas1.h2d_time.update_start(time.time())
+        if args.gpu is not None:
+            input = input.cuda(args.gpu, non_blocking=True)
+        target = target.cuda(args.gpu, non_blocking=True)
+        meas1.h2d_time.update_end(time.time())
+
+        # watch gpu_load
+        meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
+        gpu_load_records.append(meas1.gpu_load.val)
+
+        # compute output
+        meas1.gpu_time.update_start(time.time())
+        output = model(input)
+        loss = criterion(output, target)
+
+        # watch gpu_load
+        meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
+        gpu_load_records.append(meas1.gpu_load.val)
+
+        # compute gradient and do SGD step
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        meas1.gpu_time.update_end(time.time())
+
+        # calculate gpu_speed
+        meas1.gpu_speed.update(meas1.gpu_time.gap / batch_size)
+
+        # watch gpu_load
+        meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
+        gpu_load_records.append(meas1.gpu_load.val)
+
+        print(' train* ===Epoch: [{0}][{1}/{2}]\t'
+          .format(epoch, i, len(train_loader)))
+        print('>>> *io_time : [{}] *h2d_time :[{}] gpu_time :[{}] '
+                     '  *batch_time :[{}] *gpu_speed :[{}] image/s'
+                     ' **gpu_load :[{},{},{},{},{}]'
+                    .format(meas1.io_time.gap, meas1.h2d_time.gap, meas1.gpu_time.gap,
+                    meas1.batch_time.gap, meas1.gpu_speed.val, gpu_load_records[0],
+                    gpu_load_records[1], gpu_load_records[2], gpu_load_records[3],
+                    gpu_load_records[4]
+                     ))
+        logger1.info('>>> ===========********  measing batch ===========')
+        logger1.info(' train* ===Epoch: [{0}][{1}/{2}]\t'
+          .format(epoch, i, len(train_loader)))
+
         meas1.io_time.update_start(time.time())
+        meas1.batch_time.update_end(time.time())
+        logger1.info('>>> *io_time : [{}] *h2d_time :[{}] gpu_time :[{}] '
+                     '  *batch_time :[{}] *gpu_speed :[{}] image/s'
+                     ' **gpu_load :[{},{},{},{},{}]'
+                    .format(meas1.io_time.gap, meas1.h2d_time.gap, meas1.gpu_time.gap,
+                    meas1.batch_time.gap, meas1.gpu_speed.val, gpu_load_records[0],
+                    gpu_load_records[1], gpu_load_records[2], gpu_load_records[3],
+                    gpu_load_records[4]
+                     ))
         meas1.batch_time.update_start(time.time())
-        for i, (input, target) in enumerate(train_loader):
-            gpu_load_records = []
-            # watch gpu_load
-            meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
-            gpu_load_records.append(meas1.gpu_load.val)
-
-            # measure data loading times
-            meas1.io_time.update_end(time.time())
-
-            # watch gpu_load
-            meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
-            gpu_load_records.append(meas1.gpu_load.val)
-
-            # measure data loaded to GPU time
-            meas1.h2d_time.update_start(time.time())                
-            if args.gpu is not None:
-                input = input.cuda(args.gpu, non_blocking=True)
-            target = target.cuda(args.gpu, non_blocking=True)
-            meas1.h2d_time.update_end(time.time())
-
-            # watch gpu_load
-            meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
-            gpu_load_records.append(meas1.gpu_load.val)
-
-            # compute output
-            meas1.gpu_time.update_start(time.time())
-            output = model(input)
-            loss = criterion(output, target)
-
-            # watch gpu_load
-            meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
-            gpu_load_records.append(meas1.gpu_load.val)
-
-            # compute gradient and do SGD step
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-            meas1.gpu_time.update_end(time.time())
-
-            # calculate gpu_speed
-            meas1.gpu_speed.update(meas1.gpu_time.gap / batch_size)
-
-            # watch gpu_load
-            meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
-            gpu_load_records.append(meas1.gpu_load.val)
-
-            print(' train* ===Epoch: [{0}][{1}/{2}]\t'
-              .format(epoch, i, len(train_loader)))
-            print('>>> *io_time : [{}] *h2d_time :[{}] gpu_time :[{}] '
-                         '  *batch_time :[{}] *gpu_speed :[{}] image/s'
-                         ' **gpu_load :[{},{},{},{},{}]'
-                        .format(meas1.io_time.gap, meas1.h2d_time.gap, meas1.gpu_time.gap,
-                        meas1.batch_time.gap, meas1.gpu_speed.val, gpu_load_records[0],
-                        gpu_load_records[1], gpu_load_records[2], gpu_load_records[3],
-                        gpu_load_records[4]
-                         ))
-            logger1.info('>>> ===========********  measing batch ===========')
-            logger1.info(' train* ===Epoch: [{0}][{1}/{2}]\t'
-              .format(epoch, i, len(train_loader)))
-
-            meas1.io_time.update_start(time.time())    
-            meas1.batch_time.update_end(time.time())
-            logger1.info('>>> *io_time : [{}] *h2d_time :[{}] gpu_time :[{}] '
-                         '  *batch_time :[{}] *gpu_speed :[{}] image/s'
-                         ' **gpu_load :[{},{},{},{},{}]'
-                        .format(meas1.io_time.gap, meas1.h2d_time.gap, meas1.gpu_time.gap,
-                        meas1.batch_time.gap, meas1.gpu_speed.val, gpu_load_records[0],
-                        gpu_load_records[1], gpu_load_records[2], gpu_load_records[3],
-                        gpu_load_records[4]
-                         ))
-            meas1.batch_time.update_start(time.time())
-            
-        logger1.info('>>>average time  ========= **io_time : [{}] **h2d_time :[{}] '
-             '**gpu_time :[{}] **batch_time :[{}] '
-             '**gpu_speed :[{} image/s] **gpu_load :[{}]'
-            .format(meas1.io_time.avemeter.avg, meas1.h2d_time.avemeter.avg,
-                meas1.gpu_time.avemeter.avg, meas1.batch_time.avemeter.avg, 
-                meas1.gpu_speed.avg, meas1.gpu_load.avg
-             ))
+        if i == 205:
+            break
+    logger1.info('>>>average time  ========= **io_time : [{}] **h2d_time :[{}] '
+         '**gpu_time :[{}] **batch_time :[{}] '
+         '**gpu_speed :[{} image/s] **gpu_load :[{}]'
+        .format(meas1.io_time.avemeter.avg, meas1.h2d_time.avemeter.avg,
+            meas1.gpu_time.avemeter.avg, meas1.batch_time.avemeter.avg,
+            meas1.gpu_speed.avg, meas1.gpu_load.avg
+         ))
 
 def train(train_loader, model, criterion, optimizer, epoch, args):
     batch_time = AverageMeter()
