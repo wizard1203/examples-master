@@ -5,7 +5,7 @@ import operator
 import random
 import re
 
-def gpumeasure(args):
+def gpumeasure():
     txtdir = 'measurepipeline/'
     pattern = re.compile(r'(?<=gpu_speed\s*:\[)\d+\.?\d*')
     
