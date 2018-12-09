@@ -18,6 +18,7 @@ def gpumeasure():
         lines = open(os.path.join(txtdir, file), 'r')
         speedsum = 0
         for i, line in enumerate(lines):
+            print(line)
             speed = float(pattern.findall(line))
             if i > 50 and i < 151:
                 speedsum += speed
