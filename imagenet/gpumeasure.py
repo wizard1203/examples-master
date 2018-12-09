@@ -21,8 +21,9 @@ def gpumeasure():
         for _, line in enumerate(lines):
             # print(line)
             speedstr = pattern.match(line)
+            print(speedstr)
             if speedstr:
-                j +=1
+                j += 1
                 if j > 50 and j < 151:
                     speedsum += float(speedstr)
         speedave = speedsum / 100
