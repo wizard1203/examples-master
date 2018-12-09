@@ -12,14 +12,14 @@ def gpumeasure():
     file_list = os.listdir(txtdir)
     length = len(file_list)
 
-    outfile = os.path.join(txtdir, 'gpumeasure.txt')
+    outfile = 'gpumeasure.txt'
     out = open(outfile, 'a')
     for i, file in enumerate(file_list):
         lines = open(os.path.join(txtdir, file), 'r')
         speedsum = 0
         j = 0
         for _, line in enumerate(lines):
-            print(line)
+            # print(line)
             speedstr = pattern.match(line)
             if speedstr:
                 j +=1
