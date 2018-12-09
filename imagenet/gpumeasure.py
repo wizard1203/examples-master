@@ -20,7 +20,7 @@ def gpumeasure():
         j = 0
         for _, line in enumerate(lines):
             print(line)
-            speedstr = pattern.find(line)
+            speedstr = pattern.match(line)
             if speedstr:
                 j +=1
                 if j > 50 and j < 151:
