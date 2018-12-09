@@ -17,11 +17,14 @@ def gpumeasure():
     for i, file in enumerate(file_list):
         lines = open(os.path.join(txtdir, file), 'r')
         speedsum = 0
-        for i, line in enumerate(lines):
+        j = 0
+        for _, line in enumerate(lines):
             print(line)
-            speed = float(pattern.findall(line))
-            if i > 50 and i < 151:
-                speedsum += speed
+            speedstr = pattern.find(line)
+            if speedstr:
+                j +=1
+                if j > 50 and j < 151:
+                    speedsum += float(speedstr)
         speedave = speedsum / 100
         out.writelines(str(speedave), file_list)
         
