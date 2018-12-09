@@ -26,7 +26,7 @@ def gpumeasure():
                 if j > 50 and j < 151:
                     speedsum += float(speedstr)
         speedave = speedsum / 100
-        out.writelines(str(speedave) + file)
+        out.writelines(str(speedave) + file + '\r')
         
 
 if __name__ == '__main__':
