@@ -7,7 +7,7 @@ import re
 
 def gpumeasure():
     txtdir = 'measurepipeline/'
-    pattern = re.compile(r'(?=gpu_speed\s:\[)\d+\.?\d*')
+    pattern = re.compile(r'(?<=gpu_speed\s:\[)\d+\.?\d*')
     file_list = os.listdir(txtdir)
     length = len(file_list)
 
