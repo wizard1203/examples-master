@@ -8,8 +8,6 @@ import re
 def gpumeasure():
     txtdir = 'measurepipeline/'
     pattern = re.compile(r'(?=gpu_speed\s:\[)\d+\.?\d*')
-    pattern2 = re.compile(r'gpu_speed')
-    pattern3 = re.compile(r'\s:\[')
     file_list = os.listdir(txtdir)
     length = len(file_list)
 
@@ -21,12 +19,8 @@ def gpumeasure():
         j = 0
         for _, line in enumerate(lines):
             # print(line)
-            speedstr = pattern.match(line)
-            match2 = pattern2.match(line)
-            match3 = pattern3.match(line)
-            print(speedstr)
-            print(match2)
-            print(match3)
+            speedstr = pattern.search(line)
+            # print(speedstr)
             if speedstr:
                 j += 1
                 if j > 50 and j < 151:
