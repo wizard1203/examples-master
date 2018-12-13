@@ -4,9 +4,14 @@ import argparse
 import operator
 import random
 import re
+import argparse
 
-def gpumeasure():
-    txtdir = 'measurepipeline/'
+parser = argparse.ArgumentParser(description='GPU measure')
+parser.add_argument('--txt', default='measurepipeline', type=str,
+                    help='sssss')
+
+def gpumeasure(txtdir):
+    txtdir = txtdir
     pattern = re.compile(r'(?<=gpu_speed\s:\[)\d+\.?\d*')
     file_list = os.listdir(txtdir)
     length = len(file_list)
@@ -34,5 +39,5 @@ def gpumeasure():
     out.close()
 
 if __name__ == '__main__':
-    # args = parser.parse_args()
-    gpumeasure()
+    args = parser.parse_args()
+    gpumeasure(args.txt)
