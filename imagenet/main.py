@@ -8,7 +8,7 @@ import sys
 import logging
 import measure
 import getlogger
-
+import gc
 
 import torch
 import torch.nn as nn
@@ -331,6 +331,7 @@ def main_worker(gpu, ngpus_per_node, args):
                             format(batch_sizei, num_workeri))
                 one_measure(args, meas1, logger1,
                     batch_sizei, num_workeri, model, criterion, optimizer, size_resize)
+                gc.collect()
                 meas1.reset()
                 meas1.gpu_load.reset()
                 meas1.gpu_speed.reset()
