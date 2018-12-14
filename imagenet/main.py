@@ -465,6 +465,7 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
             break
     del trainset
     del train_loader
+    gc.collect()
     logger1.info('>>>average time  ========= **io_time : [{}] **h2d_time :[{}] '
          '**gpu_time :[{}] **batch_time :[{}] '
          '**gpu_speed :[{} image/s] **gpu_load :[{}]'
