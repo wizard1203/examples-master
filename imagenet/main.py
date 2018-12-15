@@ -470,8 +470,10 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
                 process.terminate()
                 process.join()
             for indexqueue in train_iter.index_queues:
-                indexqueue.queue.clear()
-            train_iter.worker_result_queue.queue.clear()
+                while not indexqueue.empty():
+                    indexqueue.get()
+            while not train_iter.worker_result_queue.empty():
+                train_iter.worker_result_queue.get()
             break
         i += 1
 
