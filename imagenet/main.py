@@ -466,14 +466,14 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
                      ))
         meas1.batch_time.update_start(time.time())
         if i == 205:
-            for process in train_iter.workers:
-                process.terminate()
-                process.join()
             for indexqueue in train_iter.index_queues:
                 while not indexqueue.empty():
                     indexqueue.get()
             while not train_iter.worker_result_queue.empty():
                 train_iter.worker_result_queue.get()
+            for process in train_iter.workers:
+                process.terminate()
+                process.join()
             break
         i += 1
 

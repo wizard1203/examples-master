@@ -24,7 +24,7 @@
         <counts>
           <entry key="MD" value="3" />
           <entry key="md" value="1" />
-          <entry key="py" value="24" />
+          <entry key="py" value="27" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
@@ -32,28 +32,28 @@
         <counts>
           <entry key="Markdown" value="4" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="24" />
+          <entry key="Python" value="27" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1124" />
+          <entry key="py" value="1127" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="1124" />
+          <entry key="Python" value="1127" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/imagenet/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="474" column="61" lean-forward="true" selection-start-line="474" selection-start-column="61" selection-end-line="474" selection-end-column="61" />
+            <state relative-caret-position="488">
+              <caret line="472" column="37" selection-start-line="472" selection-start-column="37" selection-end-line="472" selection-end-column="37" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -64,8 +64,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://D:/anaconda3/envs/py36/Lib/site-packages/torch/utils/data/dataloader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="710">
-              <caret line="107" column="22" selection-start-line="107" selection-start-column="12" selection-end-line="107" selection-end-column="22" />
+            <state relative-caret-position="281">
+              <caret line="254" column="54" selection-start-line="254" selection-start-column="39" selection-end-line="254" selection-end-column="54" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -86,6 +86,18 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://D:/anaconda3/envs/py36/Lib/site-packages/torch/multiprocessing/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="494">
+              <caret line="32" column="15" selection-start-line="32" selection-start-column="10" selection-end-line="32" selection-end-column="15" />
+              <folding>
+                <element signature="e#778#788#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/imagenet/datasets.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="38">
@@ -98,7 +110,7 @@
         <entry file="file://D:/anaconda3/envs/py36/Lib/site-packages/torch/multiprocessing/queue.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="570">
-              <caret line="30" column="40" selection-start-line="30" selection-start-column="35" selection-end-line="30" selection-end-column="40" />
+              <caret line="30" column="34" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="34" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -106,29 +118,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://D:/anaconda3/envs/py36/Lib/multiprocessing/queues.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="118" column="13" selection-start-line="118" selection-start-column="8" selection-end-line="118" selection-end-column="13" />
+            <state relative-caret-position="281">
+              <caret line="23" column="21" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/imagenet/networks/__init__.py">
+        <entry file="file://D:/anaconda3/envs/py36/Lib/multiprocessing/reduction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/imagenet/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
+            <state relative-caret-position="299">
+              <caret line="53" column="4" selection-start-line="53" selection-start-column="4" selection-end-line="53" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -156,11 +159,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>get_logger</find>
-      <find>gpumeasure</find>
-      <find>log_path</find>
-      <find>main</find>
-      <find>measurepipeline</find>
       <find>one_measure</find>
       <find>train_loader</find>
       <find>thread</find>
@@ -170,7 +168,6 @@
       <find>thre</find>
       <find>DatasetHDF5</find>
       <find>DataLoader</find>
-      <find>multiprocessing</find>
       <find>process</find>
       <find>ManagerWatchdog</find>
       <find>manager_pid</find>
@@ -185,7 +182,13 @@
       <find>_worker_loop</find>
       <find>worker_manager_thread</find>
       <find>loader</find>
+      <find>release</find>
+      <find>worker_result_queue</find>
+      <find>data_queue</find>
+      <find>multiprocessing</find>
+      <find>res</find>
       <find>clear</find>
+      <find>connect</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -346,16 +349,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://D:/anaconda3/envs/py36/Lib/site-packages/torch/multiprocessing/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="608">
-          <caret line="32" column="15" selection-start-line="32" selection-start-column="10" selection-end-line="32" selection-end-column="15" />
-          <folding>
-            <element signature="e#778#788#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/imagenet/gpumeasure.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="532">
@@ -446,20 +439,50 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://D:/anaconda3/envs/py36/Lib/multiprocessing/reduction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="53" column="4" selection-start-line="53" selection-start-column="4" selection-end-line="53" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imagenet/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="488">
+          <caret line="472" column="37" selection-start-line="472" selection-start-column="37" selection-end-line="472" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/anaconda3/envs/py36/Lib/site-packages/torch/multiprocessing/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="494">
+          <caret line="32" column="15" selection-start-line="32" selection-start-column="10" selection-end-line="32" selection-end-column="15" />
+          <folding>
+            <element signature="e#778#788#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://D:/anaconda3/envs/py36/Lib/site-packages/torch/utils/data/dataloader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="710">
-          <caret line="107" column="22" selection-start-line="107" selection-start-column="12" selection-end-line="107" selection-end-column="22" />
+        <state relative-caret-position="281">
+          <caret line="254" column="54" selection-start-line="254" selection-start-column="39" selection-end-line="254" selection-end-column="54" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://D:/anaconda3/envs/py36/Lib/multiprocessing/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://D:/anaconda3/envs/py36/Lib/site-packages/torch/multiprocessing/queue.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="570">
-          <caret line="30" column="40" selection-start-line="30" selection-start-column="35" selection-end-line="30" selection-end-column="40" />
+          <caret line="30" column="34" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="34" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -468,18 +491,8 @@
     </entry>
     <entry file="file://D:/anaconda3/envs/py36/Lib/multiprocessing/queues.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="118" column="13" selection-start-line="118" selection-start-column="8" selection-end-line="118" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/imagenet/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="474" column="61" lean-forward="true" selection-start-line="474" selection-start-column="61" selection-end-line="474" selection-end-column="61" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="281">
+          <caret line="23" column="21" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="21" />
         </state>
       </provider>
     </entry>
