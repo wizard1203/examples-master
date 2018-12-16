@@ -2,7 +2,7 @@
 #!/bin/bash
 while getopts 'h:' OPT; do
     case $OPT in
-        d)
+        h)
             host="$OPTARG";;
         ?)
             echo "Usage: `basename $0` [options] filename"
