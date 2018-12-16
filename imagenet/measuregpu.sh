@@ -12,11 +12,11 @@ shift $(($OPTIND - 1))
 echo $host
 case $host in
     gpuhome)
-        txt = "/home/datasets/imagenet/imagenet_hdf5" ;;
+        txt="/home/datasets/imagenet/imagenet_hdf5" ;;
     host143)
-        txt = "/home/hpcl/data/imagenet/imagenet_hdf5" ;;
+        txt="/home/hpcl/data/imagenet/imagenet_hdf5" ;;
     host145)
-        txt = "/media/disk2/data2/imagenet/imagenet_hdf5" ;;
+        txt="/media/disk2/data2/imagenet/imagenet_hdf5" ;;
 esac
 batch_sizes=(16 32 64 128 256)
 num_workers=(1 2 4 8 16 32 64)
