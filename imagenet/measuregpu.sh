@@ -1,6 +1,6 @@
 #!~/miniconda3/envs/py36/bin python
 #!/bin/bash
-while getopts 'host:' OPT; do
+while getopts 'h:' OPT; do
     case $OPT in
         d)
             host="$OPTARG";;
