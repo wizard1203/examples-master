@@ -315,7 +315,7 @@ def main_worker(gpu, ngpus_per_node, args):
         log_path = args.measure
         if not os.path.exists(log_path):
             os.mkdir(log_path)
-        batch_sizes = [16,32,64,128]
+        batch_sizes = [16,32,64,128,256]
         num_workers = [1,2,4,8,16,32,64]
         for batch_sizei in batch_sizes:
             for num_workeri in num_workers:
@@ -332,7 +332,7 @@ def main_worker(gpu, ngpus_per_node, args):
                 one_measure(args, meas1, logger1,
                     batch_sizei, num_workeri, model, criterion, optimizer, size_resize)
                 gc.collect()
-                for i in range(60):
+                for i in range(20):
                     print('wait %d seconds for collecting unused memory', i)
                     time.sleep(1)
                 meas1.reset()
@@ -477,6 +477,8 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
             for process in train_iter.workers:
                 process.terminate()
                 process.join()
+            del input
+            del target
             break
         i += 1
 
