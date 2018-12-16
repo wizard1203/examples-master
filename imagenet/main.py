@@ -153,13 +153,13 @@ def main2():
         log_path = args.measure
         if not os.path.exists(log_path):
             os.mkdir(log_path)
-        batch_sizes = [16, 32, 64, 128, 256]
-        num_workers = [1, 2, 4, 8, 16, 32, 64]
-        for batch_sizei in batch_sizes:
-            for num_workeri in num_workers:
-                args.batch_size = batch_sizei
-                args.workers = num_workeri
-                main_worker(args.gpu, ngpus_per_node, args)
+        # batch_sizes = [16, 32, 64, 128, 256]
+        # num_workers = [1, 2, 4, 8, 16, 32, 64]
+        # for batch_sizei in batch_sizes:
+        #     for num_workeri in num_workers:
+        #         args.batch_size = batch_sizei
+        #         args.workers = num_workeri
+        main_worker(args.gpu, ngpus_per_node, args)
         
 
 
