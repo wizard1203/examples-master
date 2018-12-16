@@ -21,10 +21,10 @@ batch_sizes=(16 32 64 128 256)
 num_workers=(1 2 4 8 16 32 64)
 
 inti=0
-while(( $inti<=${#batch_sizes[*]} ))
+while(( $inti<${#batch_sizes[*]} ))
 do
     intj=0
-    while(( $intj<=${#num_workers[*]} ))
+    while(( $intj<${#num_workers[*]} ))
     do
         python main.py -a alexnet --customize --measure alexme1 -b ${batch_sizes[$inti]} -j ${#num_workers[$intj]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
         let "intj++"
