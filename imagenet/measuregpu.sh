@@ -17,8 +17,8 @@ case host in
         txt = "/media/disk2/data2/imagenet/imagenet_hdf5" ;;
 esac
 shift $(($OPTIND - 1))
-batch_sizes = (16 32 64 128 256)
-num_workers = (1 2 4 8 16 32 64)
+batch_sizes=(16 32 64 128 256)
+num_workers=(1 2 4 8 16 32 64)
 for batch in batch_sizes
 do
     for workers in num_workers
