@@ -27,7 +27,9 @@ do
     intj=0
     while(( $intj<${#num_workers[*]} ))
     do
-        python main.py -a alexnet --customize --measure alexme1 -b ${batch_sizes[$inti]} -j ${#num_workers[$intj]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
+        #python main.py -a alexnet --customize --measure alexme1 -b ${batch_sizes[$inti]} -j ${#num_workers[$intj]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
+        echo "i : $inti, j: $intj"
+        echo " batch: ${batch_sizes[$inti]}, workers: ${#num_workers[$intj]} "
         let "intj++"
     done
     let "inti++"
