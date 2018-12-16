@@ -8,6 +8,7 @@ while getopts 'h:' OPT; do
             echo "Usage: `basename $0` [options] filename"
     esac
 done
+shift $(($OPTIND - 1))
 echo $host
 case $host in
     gpuhome)
@@ -17,7 +18,6 @@ case $host in
     host145)
         txt = "/media/disk2/data2/imagenet/imagenet_hdf5" ;;
 esac
-shift $(($OPTIND - 1))
 batch_sizes=(16 32 64 128 256)
 num_workers=(1 2 4 8 16 32 64)
 
