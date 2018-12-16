@@ -332,6 +332,7 @@ def main_worker(gpu, ngpus_per_node, args):
                 one_measure(args, meas1, logger1,
                     batch_sizei, num_workeri, model, criterion, optimizer, size_resize)
                 gc.collect()
+                time.sleep(60)
                 meas1.reset()
                 meas1.gpu_load.reset()
                 meas1.gpu_speed.reset()
