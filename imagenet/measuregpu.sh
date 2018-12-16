@@ -13,7 +13,7 @@ case host in
         txt = "/home/datasets/imagenet/imagenet_hdf5" ;;
     host143)
         txt = "/home/hpcl/data/imagenet/imagenet_hdf5" ;;
-    host145）
+    host145)
         txt = "/media/disk2/data2/imagenet/imagenet_hdf5" ;;
 esac
 shift $(($OPTIND - 1))
