@@ -27,7 +27,7 @@ do
     intj=0
     while(( $intj<${#num_workers[*]} ))
     do
-        python main.py -a resnet --customize --measure resme1 -b ${batch_sizes[$inti]} -j ${num_workers[$intj]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
+        python main.py -a resnet50 --measure resme1 -b ${batch_sizes[$inti]} -j ${num_workers[$intj]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
         echo "i : $inti, j: $intj"
         echo " batch: ${batch_sizes[$inti]}, workers: ${num_workers[$intj]} "
         let "intj++"
@@ -35,4 +35,12 @@ do
     let "inti++"
 done
 
-
+num_workers=(1 2 4 8 16)
+intj=0
+while(( $intj<${#num_workers[*]} ))
+do
+    python main.py -a resnet50 --measure resme1 -b 256 -j ${num_workers[$intj]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
+    echo "i : $inti, j: $intj"
+    echo " batch: ${batch_sizes[$inti]}, workers: ${num_workers[$intj]} "
+    let "intj++"
+done
