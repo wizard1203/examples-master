@@ -95,7 +95,7 @@ best_acc1 = 0
 meas1 = measure.Measure()
 
 
-def main():
+def main2():
     args = parser.parse_args()
 
     if not os.path.exists('log'):
@@ -148,6 +148,19 @@ def main():
     else:
         # Simply call main_worker function
         main_worker(args.gpu, ngpus_per_node, args)
+    
+    if args.measure:
+        log_path = args.measure
+        if not os.path.exists(log_path):
+            os.mkdir(log_path)
+        batch_sizes = [16, 32, 64, 128, 256]
+        num_workers = [1, 2, 4, 8, 16, 32, 64]
+        for batch_sizei in batch_sizes:
+            for num_workeri in num_workers:
+                args.batch_size = batch_sizei
+                args.workers = num_workeri
+                main_worker(args.gpu, ngpus_per_node, args)
+        
 
 
 def main_worker(gpu, ngpus_per_node, args):
@@ -176,144 +189,115 @@ def main_worker(gpu, ngpus_per_node, args):
         log_path = args.measure
         if not os.path.exists(log_path):
             os.mkdir(log_path)
-        batch_sizes = [16, 32, 64, 128, 256]
-        num_workers = [1, 2, 4, 8, 16, 32, 64]
-        for batch_sizei in batch_sizes:
-            for num_workeri in num_workers:
+        # batch_sizes = [16, 32, 64, 128, 256]
+        # num_workers = [1, 2, 4, 8, 16, 32, 64]
+        # for batch_sizei in batch_sizes:
+        #     for num_workeri in num_workers:
     
-                if args.distributed:
-                    if args.multiprocessing_distributed:
-                        # For multiprocessing distributed training, rank needs to be the
-                        # global rank among all the processes
-                        args.rank = args.rank * ngpus_per_node + gpu
-                    dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url,
-                                            world_size=args.world_size, rank=args.rank)
-                # create model
-                if args.pretrained:
-                    print("=> using pre-trained model '{}'".format(args.arch))
-                    model = models.__dict__[args.arch](pretrained=True)
-                else:
-                    print("=> creating model '{}'".format(args.arch))
-                    if args.customize:
-                        print("=> self-defined model '{}'".format(args.arch))
-                        model = AlexNet()
-                    else:
-                        model = models.__dict__[args.arch]()
-                model.train()
-                if args.distributed:
-                    # For multiprocessing distributed, DistributedDataParallel constructor
-                    # should always set the single device scope, otherwise,
-                    # DistributedDataParallel will use all available devices.
-                    if args.gpu is not None:
-                        torch.cuda.set_device(args.gpu)
-                        model.cuda(args.gpu)
-                        # When using a single GPU per process and per
-                        # DistributedDataParallel, we need to divide the batch size
-                        # ourselves based on the total number of GPUs we have
-                        args.batch_size = int(args.batch_size / ngpus_per_node)
-                        model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu])
-                    else:
-                        model.cuda()
-                        # DistributedDataParallel will divide and allocate batch_size to all
-                        # available GPUs if device_ids are not set
-                        model = torch.nn.parallel.DistributedDataParallel(model)
-                elif args.gpu is not None:
-                    torch.cuda.set_device(args.gpu)
-                    model = model.cuda(args.gpu)
-                else:
-                    # DataParallel will divide and allocate batch_size to all available GPUs
-                    if args.arch.startswith('alexnet') or args.arch.startswith('vgg'):
-                        model.features = torch.nn.DataParallel(model.features)
-                        model.cuda()
-                    else:
-                        model = torch.nn.DataParallel(model).cuda()
-    
-                # define loss function (criterion) and optimizer
-                criterion = nn.CrossEntropyLoss().cuda(args.gpu)
-    
-                if args.optim == 'SGD':
-                    optimizer = torch.optim.SGD(model.parameters(), args.lr,
-                                                momentum=args.momentum,
-                                                weight_decay=args.weight_decay)
-                elif args.optim == 'Adam':
-                    optimizer = torch.optim.Adam(model.parameters(),
-                                                 lr=args.lr, betas=(0.9, 0.999),
-                                                 weight_decay=args.weight_decay)
-    
-                # optionally resume from a checkpoint
-    
-                if args.resume:
-                    if os.path.isfile(args.resume):
-                        print("=> loading checkpoint '{}'".format(args.resume))
-                        checkpoint = torch.load(args.resume)
-                        args.start_epoch = checkpoint['epoch']
-                        best_acc1 = checkpoint['best_acc1']
-                        model.load_state_dict(checkpoint['state_dict'])
-                        optimizer.load_state_dict(checkpoint['optimizer'])
-                        print("=> loaded checkpoint '{}' (epoch {})"
-                              .format(args.resume, checkpoint['epoch']))
-                    else:
-                        print("=> no checkpoint found at '{}'".format(args.resume))
-    
-                cudnn.benchmark = True
-    
-                # Data loading code
-                traindir = os.path.join(args.data, 'train')
-                valdir = os.path.join(args.data, 'val')
-                normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                                 std=[0.229, 0.224, 0.225])
+        if args.distributed:
+            if args.multiprocessing_distributed:
+                # For multiprocessing distributed training, rank needs to be the
+                # global rank among all the processes
+                args.rank = args.rank * ngpus_per_node + gpu
+            dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url,
+                                    world_size=args.world_size, rank=args.rank)
+        # create model
+        if args.pretrained:
+            print("=> using pre-trained model '{}'".format(args.arch))
+            model = models.__dict__[args.arch](pretrained=True)
+        else:
+            print("=> creating model '{}'".format(args.arch))
+            if args.customize:
+                print("=> self-defined model '{}'".format(args.arch))
+                model = AlexNet()
+            else:
+                model = models.__dict__[args.arch]()
+        model.train()
+        if args.distributed:
+            # For multiprocessing distributed, DistributedDataParallel constructor
+            # should always set the single device scope, otherwise,
+            # DistributedDataParallel will use all available devices.
+            if args.gpu is not None:
+                torch.cuda.set_device(args.gpu)
+                model.cuda(args.gpu)
+                # When using a single GPU per process and per
+                # DistributedDataParallel, we need to divide the batch size
+                # ourselves based on the total number of GPUs we have
+                args.batch_size = int(args.batch_size / ngpus_per_node)
+                model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu])
+            else:
+                model.cuda()
+                # DistributedDataParallel will divide and allocate batch_size to all
+                # available GPUs if device_ids are not set
+                model = torch.nn.parallel.DistributedDataParallel(model)
+        elif args.gpu is not None:
+            torch.cuda.set_device(args.gpu)
+            model = model.cuda(args.gpu)
+        else:
+            # DataParallel will divide and allocate batch_size to all available GPUs
+            if args.arch.startswith('alexnet') or args.arch.startswith('vgg'):
+                model.features = torch.nn.DataParallel(model.features)
+                model.cuda()
+            else:
+                model = torch.nn.DataParallel(model).cuda()
 
-                # trainset = torchvision.datasets.ImageFolder(traindir, transforms.Compose([
-                # trainset = datasets.ImageFolder(
-                #     traindir,
-                #     transforms.Compose([
-                #         transforms.RandomResizedCrop(224),
-                #         transforms.RandomHorizontalFlip(),
-                #         transforms.ToTensor(),
-                #         normalize,
-                #     ]))
+        # define loss function (criterion) and optimizer
+        criterion = nn.CrossEntropyLoss().cuda(args.gpu)
+
+        if args.optim == 'SGD':
+            optimizer = torch.optim.SGD(model.parameters(), args.lr,
+                                        momentum=args.momentum,
+                                        weight_decay=args.weight_decay)
+        elif args.optim == 'Adam':
+            optimizer = torch.optim.Adam(model.parameters(),
+                                         lr=args.lr, betas=(0.9, 0.999),
+                                         weight_decay=args.weight_decay)
+
+        cudnn.benchmark = True
+
+        # Data loading code
+        traindir = os.path.join(args.data, 'train')
+        valdir = os.path.join(args.data, 'val')
+        normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                         std=[0.229, 0.224, 0.225])
+
+        # trainset = torchvision.datasets.ImageFolder(traindir, transforms.Compose([
+        # trainset = datasets.ImageFolder(
+        #     traindir,
+        #     transforms.Compose([
+        #         transforms.RandomResizedCrop(224),
+        #         transforms.RandomHorizontalFlip(),
+        #         transforms.ToTensor(),
+        #         normalize,
+        #     ]))
+
+        hdf5fn = os.path.join(args.data, 'imagenet-shuffled.hdf5')
+
+        if args.customize:
+            size_resize = 227
+        else:
+            size_resize = 224
+        
+        log_name = args.arch + meas1.GPUmonitor.GPUs[0].name + 'b' + str(args.batch_size) \
+                   + 'n' + str(args.workers) + '.log'
+        log_file = os.path.join(log_path, log_name)
     
-                hdf5fn = os.path.join(args.data, 'imagenet-shuffled.hdf5')
+        logger1 = getlogger.get_logger('measure', log_file)
     
-                if args.customize:
-                    size_resize = 227
-                else:
-                    size_resize = 224
+        logger1.info('>>>==================')
     
-                trainset = DatasetHDF5(hdf5fn, 'train', transforms.Compose([
-                    transforms.ToPILImage(),
-                    transforms.RandomResizedCrop(size_resize),
-                    transforms.RandomHorizontalFlip(),
-                    transforms.ToTensor(),
-                    normalize,
-                ]))
-    
-                if args.distributed:
-                    train_sampler = torch.utils.data.distributed.DistributedSampler(trainset)
-                else:
-                    train_sampler = None
-                
-                
-                log_name = args.arch + meas1.GPUmonitor.GPUs[0].name + 'b' + str(batch_sizei) \
-                           + 'n' + str(num_workeri) + '.log'
-                log_file = os.path.join(log_path, log_name)
-            
-                logger1 = getlogger.get_logger('measure', log_file)
-            
-                logger1.info('>>>==================')
-            
-                logger1.info('***batch_size: *[{}]*, num_workers: *[{}]*")'.
-                             format(batch_sizei, num_workeri))
-                one_measure(args, meas1, logger1,
-                            batch_sizei, num_workeri, model, criterion, optimizer, size_resize)
-                del model
-                gc.collect()
-                for i in range(20):
-                    print('wait %d seconds for collecting unused memory', i)
-                    time.sleep(1)
-                meas1.reset()
-                meas1.gpu_load.reset()
-                meas1.gpu_speed.reset()
+        logger1.info('***batch_size: *[{}]*, num_workers: *[{}]*")'.
+                     format(args.batch_size, args.workers))
+        one_measure(args, meas1, logger1,
+                    args.batch_size, args.workers, model, criterion, optimizer, size_resize)
+        del model
+        gc.collect()
+        for i in range(20):
+            print('wait %d seconds for collecting unused memory', i)
+            time.sleep(1)
+        meas1.reset()
+        meas1.gpu_load.reset()
+        meas1.gpu_speed.reset()
         meas1.GPUmonitor.stop()
         return
 
@@ -759,4 +743,4 @@ def accuracy(output, target, topk=(1,)):
             res.append(correct_k.mul_(100.0 / batch_size))
         return res
     
-main()
+main2()
