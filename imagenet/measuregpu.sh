@@ -8,7 +8,8 @@ while getopts 'host:' OPT; do
             echo "Usage: `basename $0` [options] filename"
     esac
 done
-case host in
+echo $host
+case $host in
     gpuhome)
         txt = "/home/datasets/imagenet/imagenet_hdf5" ;;
     host143)
