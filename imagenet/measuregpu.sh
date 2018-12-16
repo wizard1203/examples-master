@@ -31,11 +31,5 @@ do
     done
     let "inti++"
 done
-for batch in $batch_sizes
-do
-    for workers in $num_workers
-    do
-        python main.py -a alexnet --customize --measure alexme1 -b $batch -j $workers --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
-    done
-done
+
 
