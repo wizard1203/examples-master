@@ -9,12 +9,12 @@ measure(){
 }
 
 measurehost145(){
-    batch_sizes=(16 32 64 128)
-    num_workers=(1 2 4 8 16 32 64)
-    domeasure ${#batch_sizes[*]} $(echo ${batch_sizes[*]}) ${#num_workers[*]} $(echo ${num_workers[*]})
+    #batch_sizes=(16 32 64 128)
+    #num_workers=(1 2 4 8 16 32 64)
+    #domeasure ${#batch_sizes[*]} $(echo ${batch_sizes[*]}) ${#num_workers[*]} $(echo ${num_workers[*]})
 
     batch_sizes=(256 512)
-    num_workers=(1 2 4 8 16)
+    num_workers=(4 8 16)
     domeasure ${#batch_sizes[*]} $(echo ${batch_sizes[*]}) ${#num_workers[*]} $(echo ${num_workers[*]})
 }
 
@@ -30,7 +30,7 @@ domeasure(){
     index_workers=`expr $len_batchs + 1`
     for (( i=1; $i<=$len_batchs; i++ )){
         for (( j=`expr $index_workers + 1`; $j<$length; j++ )){
-            #python main.py -a alexnet --customize --measure alexme2 -b ${origarray[$i]} -j ${origarray[$j]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
+            #python main.py -a alexnet --customize --measure alexme1 -b ${origarray[$i]} -j ${origarray[$j]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
             echo "i : $i, j: $j"
             echo " batch: ${origarray[$i]}, workers: ${origarray[$j]} "
         }
