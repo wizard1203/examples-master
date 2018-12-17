@@ -30,7 +30,7 @@ domeasure(){
     index_workers=`expr $len_batchs + 1`
     for (( i=1; $i<=$len_batchs; i++ )){
         for (( j=`expr $index_workers + 1`; $j<$length; j++ )){
-            #python main.py -a alexnet --customize --measure alexme1 -b ${origarray[$i]} -j ${origarray[$j]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
+            python main.py -a alexnet --customize --measure alexme1 -b ${origarray[$i]} -j ${origarray[$j]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
             echo "i : $i, j: $j"
             echo " batch: ${origarray[$i]}, workers: ${origarray[$j]} "
         }
