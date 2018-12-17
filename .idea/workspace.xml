@@ -55,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/imagenet/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7061">
-              <caret line="325" column="38" lean-forward="true" selection-start-line="325" selection-start-column="38" selection-end-line="325" selection-end-column="38" />
+            <state relative-caret-position="374">
+              <caret line="713" column="32" lean-forward="true" selection-start-line="713" selection-start-column="32" selection-end-line="713" selection-end-column="32" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -67,8 +67,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/imagenet/networks/alexnet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="85" column="42" lean-forward="true" selection-start-line="85" selection-start-column="42" selection-end-line="85" selection-end-column="42" />
+            <state relative-caret-position="285">
+              <caret line="89" column="35" selection-start-line="89" selection-start-column="35" selection-end-line="89" selection-end-column="35" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -167,8 +167,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>thre</find>
-      <find>DatasetHDF5</find>
       <find>DataLoader</find>
       <find>process</find>
       <find>ManagerWatchdog</find>
@@ -197,6 +195,8 @@
       <find>moment</find>
       <find>momentum</find>
       <find>model</find>
+      <find>conv2</find>
+      <find>lr</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -212,16 +212,16 @@
         <option value="$PROJECT_DIR$/imagenet/datasets.py" />
         <option value="$PROJECT_DIR$/imagenet/main1.py" />
         <option value="$PROJECT_DIR$/imagenet/measuregpu.sh" />
-        <option value="$PROJECT_DIR$/imagenet/networks/alexnet.py" />
         <option value="$PROJECT_DIR$/imagenet/main.py" />
+        <option value="$PROJECT_DIR$/imagenet/networks/alexnet.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1912" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="114" />
+    <option name="y" value="55" />
+    <option name="width" value="1383" />
+    <option name="height" value="1062" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -283,10 +283,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="114" y="55" width="1383" height="1062" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1743941" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24609666" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -509,8 +509,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/imagenet/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7061">
-          <caret line="325" column="38" lean-forward="true" selection-start-line="325" selection-start-column="38" selection-end-line="325" selection-end-column="38" />
+        <state relative-caret-position="374">
+          <caret line="713" column="32" lean-forward="true" selection-start-line="713" selection-start-column="32" selection-end-line="713" selection-end-column="32" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
@@ -519,8 +519,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/imagenet/networks/alexnet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="85" column="42" lean-forward="true" selection-start-line="85" selection-start-column="42" selection-end-line="85" selection-end-column="42" />
+        <state relative-caret-position="285">
+          <caret line="89" column="35" selection-start-line="89" selection-start-column="35" selection-end-line="89" selection-end-column="35" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>

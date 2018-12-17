@@ -77,7 +77,7 @@ class AlexNet(nn.Module):
     def __init__(self, num_classes=1000):
         super(AlexNet, self).__init__()
         self.conv1 = nn.Conv2d(3, 96, kernel_size=11, stride=4, padding=0)
-        inital.constant_(self.conv2.bias, 0)
+        inital.constant_(self.conv1.bias, 0)
         self.relu1 = nn.ReLU(inplace=True)
         self.lrn1 = LRN(local_size=5, alpha=0.0001, beta=0.75)
         self.maxpool1 = nn.MaxPool2d(kernel_size=3, stride=2)
@@ -87,7 +87,7 @@ class AlexNet(nn.Module):
         self.lrn2 = LRN(local_size=5, alpha=0.0001, beta=0.75)
         self.maxpool2 = nn.MaxPool2d(kernel_size=3, stride=2)
         self.conv3 = nn.Conv2d(256, 384, kernel_size=3, padding=1)
-        inital.constant_(self.conv2.bias, 0)
+        inital.constant_(self.conv3.bias, 0)
         self.relu3 = nn.ReLU(inplace=True)
         self.conv4 = nn.Conv2d(384, 384, kernel_size=3, padding=1, groups=2)
         inital.constant_(self.conv4.bias, 1)
