@@ -317,8 +317,13 @@ def main_worker(gpu, ngpus_per_node, args):
         if args.customize:
             print("=> self-defined model '{}'".format(args.arch))
             model = AlexNet()
+            model.apply(weights_init)
+            print('model initialized')
         else:
             model = models.__dict__[args.arch]()
+            if args.arch == 'alexnet' :
+                model.apply(weights_init)
+            print('model initialized')
     model.train()
     if args.distributed:
         # For multiprocessing distributed, DistributedDataParallel constructor
@@ -701,7 +706,18 @@ def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
 # torch.save(model_object.state_dict(), 'params.pth')  
 # model_object.load_state_dict(torch.load('params.pth'))  
 
-
+def weights_init(m):
+    """ init weights of net   """
+    if isinstance(m, nn.Linear):
+        nn.init.normal_(m.weight.data, mean=0, std=0.01)
+        nn.init.normal_(m.bias.data, mean=0, std=0.01)
+    if isinstance(m, nn.Conv2d):
+        nn.init.normal_(m.weight.data, mean=0, std=0.01)
+        nn.init.normal_(m.bias.data, mean=0, std=0.01)
+    if isinstance(m, nn.BatchNorm2d):
+        nn.init.constant_(m.weight, 1)
+        nn.init.constant_(m.bias, 0)
+        
 class AverageMeter(object):
     """Computes and stores the average and current value"""
     def __init__(self):
