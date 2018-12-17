@@ -1,33 +1,5 @@
 #!~/miniconda3/envs/py36/bin python
 #!/bin/bash
-while getopts 'h:' OPT; do
-    case $OPT in
-        h)
-            host="$OPTARG";;
-        ?)
-            echo "Usage: `basename $0` [options] filename"
-    esac
-done
-shift $(($OPTIND - 1))
-echo $host
-case $host in
-    gpuhome)
-        txt="/home/datasets/imagenet/imagenet_hdf5"
-        measure
-        ;;
-    host12)
-        txt="/data/03/imagenet/imagenet_hdf5"
-        measure
-        ;;
-    host143)
-        txt="/home/hpcl/data/imagenet/imagenet_hdf5"
-        measure
-        ;;
-    host145)
-        txt="/media/disk2/data2/imagenet/imagenet_hdf5"
-        measurehost145
-        ;;
-esac
 
 measure(){
     batch_sizes=(16 32 64 128 256 512)
@@ -80,5 +52,35 @@ domeasure2(){
         let "inti++"
     done
 }
+
+while getopts 'h:' OPT; do
+    case $OPT in
+        h)
+            host="$OPTARG";;
+        ?)
+            echo "Usage: `basename $0` [options] filename"
+    esac
+done
+shift $(($OPTIND - 1))
+echo $host
+case $host in
+    gpuhome)
+        txt="/home/datasets/imagenet/imagenet_hdf5"
+        measure
+        ;;
+    host12)
+        txt="/data/03/imagenet/imagenet_hdf5"
+        measure
+        ;;
+    host143)
+        txt="/home/hpcl/data/imagenet/imagenet_hdf5"
+        measure
+        ;;
+    host145)
+        txt="/media/disk2/data2/imagenet/imagenet_hdf5"
+        measurehost145
+        ;;
+esac
+
 
 
