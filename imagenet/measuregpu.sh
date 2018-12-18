@@ -36,7 +36,7 @@ domeasure(){
     index_workers=`expr $len_batchs + 1`
     for (( i=1; $i<=$len_batchs; i++ )){
         for (( j=`expr $index_workers + 1`; $j<$length; j++ )){
-            python main.py -a alexnet --customize --measure alexme1 -b ${origarray[$i]} -j ${origarray[$j]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
+            python main.py -a resnet50 --measure resme1 -b ${origarray[$i]} -j ${origarray[$j]} --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 $txt
             echo "i : $i, j: $j"
             echo " batch: ${origarray[$i]}, workers: ${origarray[$j]} "
         }
@@ -71,22 +71,32 @@ shift $(($OPTIND - 1))
 echo $host
 case $host in
     gpuhome)
+        echo " ==================run on host:"
+        echo $host
         txt="/home/datasets/imagenet/imagenet_hdf5"
         measure
         ;;
     host12)
+        echo " ==================run on host:"
+        echo $host
         txt="/data/03/imagenet/imagenet_hdf5"
         measure
         ;;
     host143)
+        echo " ==================run on host:"
+        echo $host
         txt="/home/hpcl/data/imagenet/imagenet_hdf5"
         measure
         ;;
     host145)
+        echo " ==================run on host:"
+        echo $host
         txt="/media/disk2/data2/imagenet/imagenet_hdf5"
         measurehost145
         ;;
     mgd189)
+        echo " ==================run on host:"
+        echo $host
         txt="/home/mgd/data/imagenet_hdf5_224"
         measuremgd189
         ;;
