@@ -18,6 +18,12 @@ measurehost145(){
     domeasure ${#batch_sizes[*]} $(echo ${batch_sizes[*]}) ${#num_workers[*]} $(echo ${num_workers[*]})
 }
 
+measuremgd189(){
+    batch_sizes=(8 16 32 64 128)
+    num_workers=(2 4 8 16)
+    domeasure ${#batch_sizes[*]} $(echo ${batch_sizes[*]}) ${#num_workers[*]} $(echo ${num_workers[*]})
+}
+
 domeasure(){
     local origarray
     local len_batchs
@@ -79,6 +85,10 @@ case $host in
     host145)
         txt="/media/disk2/data2/imagenet/imagenet_hdf5"
         measurehost145
+        ;;
+    mgd189)
+        txt="/home/mgd/data/imagenet_hdf5_224"
+        measuremgd189
         ;;
 esac
 
