@@ -271,7 +271,7 @@ def main_worker(gpu, ngpus_per_node, args):
         #         normalize,
         #     ]))
 
-        hdf5fn = os.path.join(args.data, 'imagenet-shuffled.hdf5')
+        # hdf5fn = os.path.join(args.data, 'imagenet-shuffled.hdf5')
 
         if args.customize:
             size_resize = 227
