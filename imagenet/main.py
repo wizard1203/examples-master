@@ -543,7 +543,7 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
         meas1.gpu_time.update_end(time.time())
 
         # calculate gpu_speed
-        meas1.gpu_speed.update( (1 / meas1.gpu_time.gap) / batch_size)
+        meas1.gpu_speed.update( 1 / ( meas1.gpu_time.gap / batch_size ))
 
         # watch gpu_load
         meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
