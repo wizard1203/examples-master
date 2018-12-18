@@ -399,7 +399,7 @@ def main_worker(gpu, ngpus_per_node, args):
     #         normalize,
     #     ]))
 
-    hdf5fn = os.path.join(args.data, 'imagenet-shuffled.hdf5')
+    hdf5fn = os.path.join(args.data, 'imagenet-shuffled-224.hdf5')
 
     if args.customize:
         size_resize = 227
@@ -480,7 +480,7 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
     """
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
-    hdf5fn = os.path.join(args.data, 'imagenet-shuffled.hdf5')
+    hdf5fn = os.path.join(args.data, 'imagenet-shuffled-224.hdf5')
     trainset = DatasetHDF5(hdf5fn, 'train', transforms.Compose([
         transforms.ToPILImage(),
         transforms.RandomResizedCrop(size_resize),
@@ -543,7 +543,7 @@ def one_measure(args, meas1, logger1, batch_size, num_workers, model, criterion,
         meas1.gpu_time.update_end(time.time())
 
         # calculate gpu_speed
-        meas1.gpu_speed.update(meas1.gpu_time.gap / batch_size)
+        meas1.gpu_speed.update( (1 / meas1.gpu_time.gap) / batch_size)
 
         # watch gpu_load
         meas1.gpu_load.update(meas1.GPUmonitor.GPUs[args.gpu].load)
