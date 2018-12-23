@@ -40,12 +40,12 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="py" value="1764" />
-          <entry key="sh" value="1063" />
+          <entry key="sh" value="1069" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="1063" />
+          <entry key="PLAIN_TEXT" value="1069" />
           <entry key="Python" value="1764" />
         </counts>
       </usages-collector>
@@ -53,11 +53,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/imagenet/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="550" lean-forward="true" selection-start-line="550" selection-end-line="550" />
+            <state relative-caret-position="-8303">
+              <caret line="38" column="67" selection-start-line="38" selection-start-column="61" selection-end-line="38" selection-end-column="67" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -77,11 +77,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/imagenet/measuregpu.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="21" column="30" selection-start-line="21" selection-start-column="30" selection-end-line="21" selection-end-column="30" />
+            <state relative-caret-position="437">
+              <caret line="80" column="14" selection-start-line="80" selection-start-column="14" selection-end-line="80" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -162,7 +162,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>worker_result_queue</find>
       <find>data_queue</find>
       <find>multiprocessing</find>
       <find>res</find>
@@ -192,6 +191,7 @@
       <find>print_freq</find>
       <find>update</find>
       <find>txt</find>
+      <find>resnet50</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -507,20 +507,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/imagenet/measuregpu.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="21" column="30" selection-start-line="21" selection-start-column="30" selection-end-line="21" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/imagenet/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="550" lean-forward="true" selection-start-line="550" selection-end-line="550" />
+        <state relative-caret-position="-8303">
+          <caret line="38" column="67" selection-start-line="38" selection-start-column="61" selection-end-line="38" selection-end-column="67" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imagenet/measuregpu.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="80" column="14" selection-start-line="80" selection-start-column="14" selection-end-line="80" selection-end-column="14" />
         </state>
       </provider>
     </entry>

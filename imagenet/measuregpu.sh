@@ -76,8 +76,9 @@ while getopts 'h:' OPT; do
         h)
             host="$OPTARG";;
         n)
-            net="$OPTARG";;
+            net="$OPTARG"
             netdata=$net'mes'
+            ;;
         ?)
             echo "Usage: `basename $0` [options] filename"
     esac
