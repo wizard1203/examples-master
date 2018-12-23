@@ -71,7 +71,7 @@ domeasure2(){
     done
 }
 
-while getopts 'h:' OPT; do
+while getopts 'h:n:' OPT; do
     case $OPT in
         h)
             host="$OPTARG";;
