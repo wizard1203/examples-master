@@ -13,7 +13,7 @@ parser.add_argument('-o', '--outname', default='gpumeasure', type=str,
                     help='gpumeasure file name')
 
 def gpumeasure(args):
-    txtdir = args.txtdir
+    txtdir = args.txt
     pattern = re.compile(r'(?<=gpu_speed\s:\[)\d+\.?\d*')
     file_list = os.listdir(txtdir)
     length = len(file_list)
