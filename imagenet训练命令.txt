@@ -1,0 +1,72 @@
+imagenet:
+host12: /media/disk2/data2/imagenet/imagenet_hdf5 /data/03/imagenet/imagenet_hdf5
+P100: /data/03/imagenet/imagenet_hdf5
+
+host146: /media/disk2/data2/imagenet/imagenet_hdf5
+
+host145: /media/disk2/data2/imagenet/imagenet_hdf5
+host143(P100 V100): /home/hpcl/data/imagenet/imagenet_hdf5
+gpuhome : /home/datasets/imagenet/imagenet_hdf5 
+
+2X TITAN :
+CUDA_VISIBLE_DEVICES=0 python main.py -a alexnet --optim Adam --lr 0.01 --epochs 95 --kind 0 /home/hpcl/data/imagenet/imagenet_hdf5 
+CUDA_VISIBLE_DEVICES=1 python main.py -a alexnet --customize --lr 0.01 --weight-decay 0.00001 --epochs 95 --kind 22 /home/hpcl/data/imagenet/imagenet_hdf5  
+CUDA_VISIBLE_DEVICES=0 python main.py -a resnet50 --lr 0.01 --epochs 95 --kind 0 /home/hpcl/data/imagenet/imagenet_hdf5  
+CUDA_VISIBLE_DEVICES=1 python main.py -a resnet50 --batch-size 64 --optim SGD--lr 0.01 --weight-decay 0.000001 --epochs 95 --kind 4 /home/hpcl/data/imagenet/imagenet_hdf5
+
+
+host12:
+python main.py -a alexnet --customize --gpu 0 --lr 0.01 --batch-size 128 --weight-decay 0.0005 --epochs 95 --kind new5 /data/03/imagenet/imagenet_hdf5
+
+gpuhome:
+CUDA_VISIBLE_DEVICES=0 python main.py -a resnet50 --lr 0.1 --epochs 95 --kind 0 /home/datasets/imagenet/imagenet_hdf5 
+python main.py -a alexnet --customize --gpu 0 --lr 0.01 --batch-size 128 --weight-decay 0.0005 --epochs 95 --kind new1 /home/datasets/imagenet/imagenet_hdf5  
+
+host145:
+CUDA_VISIBLE_DEVICES=0 python main.py -a resnet50 --batch-size 32 --lr 0.01 --epochs 95 --kind 0 /media/disk2/data2/imagenet/imagenet_hdf5
+****checkpoint****:
+python main.py --arch resnet50 --epochs 95  --kind r1 --resume ~/examples-master/imagenet/checkpoint.pth.tar /media/disk2/data2/imagenet/imagenet_hdf5
+
+mgd189:
+python main.py -a alexnet --customize --gpu 0 --lr 0.01 --batch-size 128 --weight-decay 0.0005 --epochs 95 --kind new1 ...... 
+
+
+measure:
+gpuhome:
+python main.py -a alexnet --customize --measure  alexme1 --gpu 1 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 /home/datasets/imagenet/imagenet_hdf5  
+
+host12: python main.py -a alexnet --customize --measure  alexme1 --gpu 1 --lr 0.01 --weight-decay 0.0005 --epochs 95 --kind 000 /data/03/imagenet/imagenet_hdf5
+
+host143: python main.py -a alexnet --customize --measure  alexme1 --gpu 1 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 /home/hpcl/data/imagenet/imagenet_hdf5?
+
+host145: python main.py -a alexnet --customize --measure  alexme1 --gpu 0 --lr 0.05 --weight-decay 0.00001 --epochs 95 --kind 000 /media/disk2/data2/imagenet/imagenet_hdf5
+
+mgd189:
+python main.py -a resnet50 --measure resme1 --gpu 0 --lr 0.01 --weight-decay 0.0005 --epochs 95 --kind meas ..... 
+
+scp zhtang@gpuhome.comp.hkbu.edu.hk:~/examples-master/imagenet/gpumeasure.txt .
+
+python gpumeasure.py --txt alexme1
+
+log : 
+resnet SGD batch 64 lr 0.08 weight_decay 0.0001 not converge
+resnet SGD batch 64 lr 0.1 weight_decay 0.000001 not converge
+resnet SGD batch 64 lr 0.008 weight_decay 0.0001 not converge
+resnet SGD batch 64 lr 0.08 weight_decay 0.0001 not converge
+resnet SGD batch 256 lr 0.01 weight_decay 0.0001 10+ epoch 4.0781 loss (the loss when epoch begin)
+resnet SGD batch 32 lr 0.1 weight_decay 0.0001 20+ epoch 3.9705 loss  10 epoch begin converge
+
+alexnet SGD1 batch 256 lr 0.01 weight_decay 0.00001 epoch 20 loss 3-5  
+alexnet SGD2 batch 256 lr 0.01 weight_decay 0.00001 epoch 20 loss 4.5-5.5  
+alexnet SGD3 batch 256 lr 0.005 weight_decay 0.00001 epoch 20 loss 3.2-3.7  
+alexnet SGD4 batch 256 lr 0.045 weight_decay 0.00001 epoch 30 loss 6-7  epoch 60 loss 4.7-7 epoch 90 loss 4.4-4.7
+alexnet SGD5 batch 256 lr 0.03 weight_decay 0.0003 epoch 30 loss 4.0-4.5 epoch 60 loss 2.9-3.2 epoch90 loss 2.6-3.1
+alexnet SGD10 batch 256 lr 0.02 weight_decay 0.00001 epoch 30 loss 3.9-4.2 epoch 60 loss 3.2-3.5 epoch90 loss 3.2-3.5
+alexnet SGD12 batch 256 lr 0.015 weight_decay 0.00001 epoch 30 loss 3.1-3.4 epoch 56 loss 2.4-2.7 
+alexnet SGD13 batch 256 lr 0.0075 weight_decay 0.00001 epoch 30 loss 3.1-3.4 epoch 60 loss 2.7-3.0 epoch78 loss 2.7-3.1 
+alexnet SGD15 batch 256 lr 0.01 weight_decay 0.0001 epoch 30 loss 3.1-3.4 epoch 60 loss 2.4-2.7  epoch90 loss 2.3-2.6 
+alexnet SGD16 batch 256 lr 0.00875 weight_decay 0.0001 epoch 30 loss 3.0-3.3 epoch 60 loss 2.4-2.7 epoch90 loss 2.4-2.7 
+alexnet SGD17 batch 256 lr 0.0095 weight_decay 0.00001 epoch 30 loss 3.0-3.3 epoch 60 loss 2.7-3.0 epoch90 loss 2.7-3.0 
+
+
+
