@@ -77,6 +77,7 @@ while getopts 'h:' OPT; do
             host="$OPTARG";;
         n)
             net="$OPTARG"
+            echo $net
             netdata=$net'mes'
             ;;
         ?)
