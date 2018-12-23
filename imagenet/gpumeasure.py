@@ -7,16 +7,18 @@ import re
 import argparse
 
 parser = argparse.ArgumentParser(description='GPU measure')
-parser.add_argument('--txt', default='measurepipeline', type=str,
+parser.add_argument('-t', '--txt', default='measurepipeline', type=str,
                     help='sssss')
+parser.add_argument('-o', '--outname', default='gpumeasure', type=str,
+                    help='gpumeasure file name')
 
-def gpumeasure(txtdir):
-    txtdir = txtdir
+def gpumeasure(args):
+    txtdir = args.txtdir
     pattern = re.compile(r'(?<=gpu_speed\s:\[)\d+\.?\d*')
     file_list = os.listdir(txtdir)
     length = len(file_list)
-
-    outfile = 'gpumeasure.txt'
+    
+    outfile = args.outname + '.txt'
     out = open(outfile, 'a')
     for i, file in enumerate(file_list):
         lines = open(os.path.join(txtdir, file), 'r')
@@ -40,4 +42,4 @@ def gpumeasure(txtdir):
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    gpumeasure(args.txt)
+    gpumeasure(args)

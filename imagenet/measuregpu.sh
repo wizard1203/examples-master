@@ -9,8 +9,8 @@ measure(){
 }
 
 measurehost12(){
-    batch_sizes=(256 512)
-    num_workers=(2 4 8 16)
+    batch_sizes=(16 32 64 128)
+    num_workers=(2 4 8 16 32 64)
     domeasure ${#batch_sizes[*]} $(echo ${batch_sizes[*]}) ${#num_workers[*]} $(echo ${num_workers[*]})
 }
 
@@ -19,8 +19,8 @@ measurehost145(){
     #num_workers=(2 4 8 16 32 64)
     #domeasure ${#batch_sizes[*]} $(echo ${batch_sizes[*]}) ${#num_workers[*]} $(echo ${num_workers[*]})
 
-    batch_sizes=(16 32 64 128 256 512)
-    num_workers=(2 4 8 16)
+    batch_sizes=(16 32 64 128)
+    num_workers=(2 4 8 16 32)
     domeasure ${#batch_sizes[*]} $(echo ${batch_sizes[*]}) ${#num_workers[*]} $(echo ${num_workers[*]})
 }
 
