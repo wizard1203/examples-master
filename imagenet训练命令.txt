@@ -22,6 +22,9 @@ gpuhome:
 CUDA_VISIBLE_DEVICES=0 python main.py -a resnet50 --lr 0.1 --epochs 95 --kind 0 /home/datasets/imagenet/imagenet_hdf5 
 python main.py -a alexnet --customize --gpu 0 --lr 0.01 --batch-size 128 --weight-decay 0.0005 --epochs 95 --kind new1 /home/datasets/imagenet/imagenet_hdf5  
 
+host143:
+python main.py -a googlenet --gpu 1 --batch-size 128 --lr 0.0015 --weight-decay 0.0001 --epochs 20 --kind 111 /home/hpcl/data/imagenet/imagenet_hdf5
+
 host145:
 CUDA_VISIBLE_DEVICES=0 python main.py -a resnet50 --batch-size 32 --lr 0.01 --epochs 95 --kind 0 /media/disk2/data2/imagenet/imagenet_hdf5
 ****checkpoint****:
@@ -73,3 +76,4 @@ alexnet SGD17 batch 256 lr 0.0095 weight_decay 0.00001 epoch 30 loss 3.0-3.3 epo
 
 vgg16 SGD batch lr 0.01 weight_decay 0.0005 
 
+googlenet SGD batch 128 lr 0.0015 weight_decat 0.0001
