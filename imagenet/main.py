@@ -25,6 +25,7 @@ import torchvision.models as models
 
 from datasets import DatasetHDF5  
 from networks.alexnet import AlexNet
+from networks.googlenet import GoogleNet
 from pprint import pformat
 
 model_names = sorted(name for name in models.__dict__
@@ -210,6 +211,8 @@ def main_worker(gpu, ngpus_per_node, args):
             if args.customize:
                 print("=> self-defined model '{}'".format(args.arch))
                 model = AlexNet()
+            elif args.arch == 'googlenet':
+                model = GoogleNet()
             else:
                 model = models.__dict__[args.arch]()
         model.train()
@@ -319,6 +322,8 @@ def main_worker(gpu, ngpus_per_node, args):
             model = AlexNet()
             model.apply(weights_init)
             print('model initialized')
+        elif args.arch == 'googlenet':
+                model = GoogleNet()
         else:
             model = models.__dict__[args.arch]()
             if args.arch == 'alexnet' :
