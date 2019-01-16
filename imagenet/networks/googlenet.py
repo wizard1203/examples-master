@@ -108,7 +108,7 @@ def test():
     model = GoogLeNet()
     model.train()
     model.cuda()
-    x = torch.randn(16, 3, 224, 224)
+    x = torch.randn(128, 3, 224, 224)
     x = x.cuda()
     y = model(x)
     print(y.size())
