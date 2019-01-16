@@ -101,9 +101,9 @@ class GoogLeNet(nn.Module):
 def test():
     net = GoogLeNet()
     model = net.cuda()
-    x = torch.randn(10, 3, 224, 224)
+    x = torch.randn(32, 3, 224, 224)
     x.cuda()
-    y = net(x)
+    y = model(x)
     print(y.size())
 
 test()
