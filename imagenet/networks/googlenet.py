@@ -103,7 +103,7 @@ def test():
     model.train()
     model.cuda()
     x = torch.randn(32, 3, 224, 224)
-    x.cuda()
+    x = x.cuda()
     y = model(x)
     print(y.size())
 
