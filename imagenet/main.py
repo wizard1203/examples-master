@@ -139,6 +139,11 @@ def main2():
 
     args.distributed = args.world_size > 1 or args.multiprocessing_distributed
 
+    if args.measure:
+        log_path = args.measure
+        if not os.path.exists(log_path):
+            os.mkdir(log_path)
+
     ngpus_per_node = torch.cuda.device_count()
     if args.multiprocessing_distributed:
         # Since we have ngpus_per_node processes per node, the total world_size
@@ -151,17 +156,14 @@ def main2():
         # Simply call main_worker function
         main_worker(args.gpu, ngpus_per_node, args)
     
-    if args.measure:
-        log_path = args.measure
-        if not os.path.exists(log_path):
-            os.mkdir(log_path)
+
         # batch_sizes = [16, 32, 64, 128, 256]
         # num_workers = [1, 2, 4, 8, 16, 32, 64]
         # for batch_sizei in batch_sizes:
         #     for num_workeri in num_workers:
         #         args.batch_size = batch_sizei
         #         args.workers = num_workeri
-        main_worker(args.gpu, ngpus_per_node, args)
+        # main_worker(args.gpu, ngpus_per_node, args)
         
 
 
