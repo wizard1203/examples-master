@@ -100,7 +100,7 @@ class GoogLeNet(nn.Module):
 
 def test():
     net = GoogLeNet()
-    x = torch.randn(1,3,32,32)
+    x = torch.randn(1, 3, 224, 224)
     y = net(x)
     print(y.size())
 
