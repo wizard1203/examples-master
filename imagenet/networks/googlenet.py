@@ -77,7 +77,7 @@ class GoogLeNet(nn.Module):
         self.b5 = Inception(832, 384, 192, 384, 48, 128, 128)
 
         self.avgpool = nn.AvgPool2d(8, stride=1)
-        self.linear = nn.Linear(50176, 1000)
+        self.linear = nn.Linear(2458624, 1000)
 
     def forward(self, x):
         out = self.pre_layers(x)
@@ -100,7 +100,9 @@ class GoogLeNet(nn.Module):
 
 def test():
     net = GoogLeNet()
-    x = torch.randn(1, 3, 224, 224)
+    model = net.cuda()
+    x = torch.randn(10, 3, 224, 224)
+    x.cuda()
     y = net(x)
     print(y.size())
 
